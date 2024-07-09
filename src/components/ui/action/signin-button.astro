@@ -1,0 +1,57 @@
+---
+import { Icon } from 'astro-icon/components';
+
+type Variant = 'solid' | 'ghost';
+
+interface Props {
+    variant?: Variant;
+}
+
+const { variant = 'ghost' }: Props = Astro.props;
+
+const is = (v: Variant) => variant === v;
+---
+
+<button
+    id="signinbutton"
+    type="button"
+    class:list={[
+        'flex items-center justify-start',
+        'gap-2 rounded-md px-2 py-1',
+        'transition-colors',
+        !is('solid') && 'hover:bg-zinc-200 dark:hover:bg-zinc-800/50',
+        is('solid') && 'bg-base text-bg dark:bg-dark-base dark:text-dark-bg',
+        is('solid') && 'hover:bg-base/90 dark:hover:bg-dark-base/90'
+    ]}
+>
+    <Icon name="github" class="h-5 w-5" />
+
+    Sign in with GitHub
+</button>
+
+<script>
+    import { $ } from '~frontend/query';
+
+    const btn = $('#signinbutton');
+
+    if (btn) {
+        btn.onclick = () => {
+            const width = 600;
+            const height = 700;
+            const left = window.innerWidth / 2 - width / 2;
+            const top = window.innerHeight / 2 - height / 2;
+
+            window.open(
+                '/auth/github',
+                'Github Login',
+                `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${width}, height=${height}, top=${top}, left=${left}`
+            );
+
+            // Disable the button for a few seconds to prevent multiple clicks
+            btn.setAttribute('aria-disabled', 'true');
+            setTimeout(() => {
+                btn.removeAttribute('aria-disabled');
+            }, 3000);
+        };
+    }
+</script>

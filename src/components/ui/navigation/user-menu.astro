@@ -1,0 +1,119 @@
+---
+import { SignOut } from 'auth-astro/components';
+import { getSession } from 'auth-astro/server';
+import type { FullSession } from '~backend/session.type';
+
+const session = (await getSession(Astro.request)) as FullSession | null;
+---
+
+<div class="dropdown dropdown-end">
+    <button
+        type="button"
+        class:list={[
+            'relative flex rounded-full text-sm',
+            'focus:outline-none focus:ring-2 focus:ring-offset-2',
+            'dark:focus:ring-zinc-300 dark:focus:ring-offset-zinc-950',
+            'focus:ring-zinc-950 focus:ring-offset-zinc-300'
+        ]}
+        id="user-menu-button"
+    >
+        <span class="sr-only">Open user menu</span>
+        <img class="h-8 w-8 rounded-full" src={session?.user?.image} alt="" />
+    </button>
+
+    <ul
+        class="dropdown-content rounded-box zinc-950/5 theme-colors mt-2 flex flex-col gap-2 whitespace-nowrap rounded-lg border px-2 py-2 dark:border-white/5"
+    >
+        <li class="px-2 py-1">
+            Signed in as
+            <a
+                href={session?.github.profile.html_url}
+                class="font-semibold transition-colors hover:text-zinc-600 dark:hover:text-zinc-50"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                {session?.github.profile.login}
+            </a>
+        </li>
+        <span class="h-[1px] dark:bg-white/5"></span>
+        <li
+            class="flex flex-col items-stretch rounded-md px-2 py-1 hover:bg-zinc-200 dark:hover:bg-white/5"
+        >
+            <SignOut class="text-start">Sign out</SignOut>
+        </li>
+    </ul>
+</div>
+
+<style>
+    .dropdown:is(:not(details)) .dropdown-content {
+        @apply origin-top scale-95 transform transition duration-200 ease-out;
+    }
+    .dropdown-bottom .dropdown-content {
+        @apply origin-top;
+    }
+    .dropdown-top .dropdown-content {
+        @apply origin-bottom;
+    }
+    .dropdown-left .dropdown-content {
+        @apply origin-right;
+    }
+    .dropdown-right .dropdown-content {
+        @apply origin-left;
+    }
+    .dropdown.dropdown-open .dropdown-content,
+    .dropdown:focus .dropdown-content,
+    .dropdown:focus-within .dropdown-content {
+        @apply scale-100;
+    }
+    @media (hover: hover) {
+        .dropdown.dropdown-hover:hover .dropdown-content {
+            @apply scale-100;
+        }
+    }
+    .dropdown {
+        @apply relative inline-block;
+    }
+    .dropdown > *:not(summary):focus {
+        @apply outline-none;
+    }
+    .dropdown .dropdown-content {
+        @apply absolute;
+    }
+    .dropdown:is(:not(details)) .dropdown-content {
+        @apply invisible opacity-0;
+    }
+    .dropdown-end .dropdown-content {
+        @apply end-0;
+    }
+    .dropdown-left .dropdown-content {
+        @apply bottom-auto end-full top-0;
+    }
+    .dropdown-right .dropdown-content {
+        @apply bottom-auto start-full top-0;
+    }
+    .dropdown-bottom .dropdown-content {
+        @apply bottom-auto top-full;
+    }
+    .dropdown-top .dropdown-content {
+        @apply bottom-full top-auto;
+    }
+    .dropdown-end.dropdown-right .dropdown-content {
+        @apply bottom-0 top-auto;
+    }
+    .dropdown-end.dropdown-left .dropdown-content {
+        @apply bottom-0 top-auto;
+    }
+    .dropdown.dropdown-open .dropdown-content,
+    .dropdown:not(.dropdown-hover):focus .dropdown-content,
+    .dropdown:focus-within .dropdown-content {
+        @apply visible opacity-100;
+    }
+    @media (hover: hover) {
+        .dropdown.dropdown-hover:hover .dropdown-content {
+            @apply visible opacity-100;
+        }
+    }
+    .dropdown:is(details) summary::-webkit-details-marker {
+        @apply hidden;
+    }
+</style>

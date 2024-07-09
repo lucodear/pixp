@@ -1,0 +1,19 @@
+---
+import Page from '~components/layouts/page.astro';
+import ErrorSection from '~components/sections/error-section.astro';
+---
+
+<Page>
+    <main
+        class:list={['h-screen', 'flex flex-col items-center justify-center text-center']}
+    >
+        <ErrorSection
+            code={404}
+            title="Not Found"
+            message=`
+                Check the URL, it might be incorrect or the pull request doesn't
+                exist.
+            `
+        />
+    </main>
+</Page>

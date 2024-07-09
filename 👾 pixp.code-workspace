@@ -1,0 +1,44 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "lucodear-icons.folders.customClones": [
+            {
+                "base": "repo",
+                "color": "blue-500",
+                "folderNames": ["commits"],
+                "name": "folder-repo-commits"
+            },
+            {
+                "base": "layout",
+                "color": "green-400",
+                "folderNames": ["sections"],
+                "name": "folder-sections"
+            },
+            {
+                "base": "images",
+                "color": "blue-400",
+                "folderNames": ["graphics"],
+                "name": "folder-graphics"
+            },
+            {
+                "base": "images",
+                "color": "purple-400",
+                "folderNames": ["icons"],
+                "name": "folder-icons"
+            }
+        ],
+        "lucodear-icons.files.customClones": [
+            {
+                "base": "typescript",
+                "name": "typescript-api",
+                "color": "yellow-300",
+                "fileExtensions": ["api.ts"],
+				"fileNames": ["api.ts"]
+            }
+        ]
+    }
+}

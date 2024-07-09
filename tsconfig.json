@@ -1,0 +1,18 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "baseUrl": ".",
+    "paths": {
+      "~pages/*": ["src/pages/*"],
+      "~layouts/*": ["./src/layouts/*"],
+      "~components/*": ["./src/components/*"],
+      "~frontend/*": ["src/common/frontend/*"],
+      "~backend/*": ["src/common/backend/*"],
+      "~typings": ["src/common/typings/types.ts"],
+      "~gh": ["src/common/github.api.ts"],
+      "~logger": ["src/common/logger.ts"],
+    }
+  },
+  "exclude": ["node_modules", "dist", "public"]
+}

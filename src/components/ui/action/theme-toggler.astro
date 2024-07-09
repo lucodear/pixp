@@ -1,0 +1,129 @@
+---
+
+---
+
+<label class="swap swap-rotate transition-opacity hover:opacity-80">
+    <!-- this hidden checkbox controls the state -->
+    <input type="checkbox" id="theme-toggler-checkbox" />
+
+    <!-- moon icon -->
+    <svg viewBox="0 0 20 20" class="swap-on h-5 w-5 fill-current">
+        <path
+            fill-rule="evenodd"
+            d="M7.455 2.004a.75.75 0 0 1 .26.77 7 7 0 0 0 9.958 7.967.75.75 0 0 1 1.067.853A8.5 8.5 0 1 1 6.647 1.921a.75.75 0 0 1 .808.083Z"
+            clip-rule="evenodd"></path>
+    </svg>
+
+    <!-- sun icon -->
+    <svg class="swap-off h-5 w-5 fill-current" viewBox="0 0 20 20">
+        <path
+            d="M11,2V1a1,1,0,0,0-1-1h0A1,1,0,0,0,9,1V2a1,1,0,0,0,1,1h0A1,1,0,0,0,11,2ZM5.05025,3.636l-.7071-.70711a1,1,0,0,0-1.41422,0h0a1,1,0,0,0,0,1.41422l.70711.7071a1,1,0,0,0,1.41421,0h0A1,1,0,0,0,5.05025,3.636ZM2,9H1a1,1,0,0,0-1,1H0a1,1,0,0,0,1,1H2a1,1,0,0,0,1-1H3A1,1,0,0,0,2,9Zm1.636,5.94975-.70711.7071a1,1,0,0,0,0,1.41422h0a1,1,0,0,0,1.41422,0l.7071-.70711a1,1,0,0,0,0-1.41421h0A1,1,0,0,0,3.636,14.94975ZM9,18v1a1,1,0,0,0,1,1h0a1,1,0,0,0,1-1V18a1,1,0,0,0-1-1h0A1,1,0,0,0,9,18Zm5.94975-1.636.7071.70711a1,1,0,0,0,1.41422,0h0a1,1,0,0,0,0-1.41422l-.70711-.7071a1,1,0,0,0-1.41421,0h0A1,1,0,0,0,14.94975,16.364ZM18,11h1a1,1,0,0,0,1-1h0a1,1,0,0,0-1-1H18a1,1,0,0,0-1,1h0A1,1,0,0,0,18,11ZM16.364,5.05025l.70711-.7071a1,1,0,0,0,0-1.41422h0a1,1,0,0,0-1.41422,0l-.7071.70711a1,1,0,0,0,0,1.41421h0A1,1,0,0,0,16.364,5.05025ZM10,7a3,3,0,1,1-3,3,3.00339,3.00339,0,0,1,3-3m0-2a5,5,0,1,0,5,5,5,5,0,0,0-5-5Z"
+        ></path>
+    </svg>
+</label>
+
+<style>
+    .swap {
+        @apply relative inline-grid select-none place-content-center;
+    }
+
+    .swap > * {
+        @apply col-start-1 row-start-1;
+    }
+
+    .swap input {
+        @apply appearance-none;
+    }
+
+    .swap .swap-on,
+    .swap .swap-indeterminate,
+    .swap input:indeterminate ~ .swap-on {
+        @apply opacity-0;
+    }
+
+    .swap input:checked ~ .swap-off,
+    .swap-active .swap-off,
+    .swap input:indeterminate ~ .swap-off {
+        @apply opacity-0;
+    }
+
+    .swap input:checked ~ .swap-on,
+    .swap-active .swap-on,
+    .swap input:indeterminate ~ .swap-indeterminate {
+        @apply opacity-100;
+    }
+
+    .swap {
+        @apply cursor-pointer;
+    }
+
+    .swap > * {
+        @apply duration-300 ease-out;
+        transition-property: transform, opacity;
+    }
+
+    .swap-rotate .swap-on,
+    .swap-rotate .swap-indeterminate,
+    .swap-rotate input:indeterminate ~ .swap-on {
+        @apply rotate-45;
+    }
+
+    .swap-rotate input:checked ~ .swap-off,
+    .swap-active:where(.swap-rotate) .swap-off,
+    .swap-rotate input:indeterminate ~ .swap-off {
+        @apply -rotate-45;
+    }
+
+    .swap-rotate input:checked ~ .swap-on,
+    .swap-active:where(.swap-rotate) .swap-on,
+    .swap-rotate input:indeterminate ~ .swap-indeterminate {
+        @apply rotate-0;
+    }
+
+    .swap-flip {
+        transform-style: preserve-3d;
+        perspective: 16em;
+    }
+    .swap-flip .swap-on,
+    .swap-flip .swap-indeterminate,
+    .swap-flip input:indeterminate ~ .swap-on {
+        transform: rotateY(180deg);
+        backface-visibility: hidden;
+        @apply opacity-100;
+    }
+
+    .swap-flip input:checked ~ .swap-off,
+    .swap-active:where(.swap-flip) .swap-off,
+    .swap-flip input:indeterminate ~ .swap-off {
+        transform: rotateY(-180deg);
+        backface-visibility: hidden;
+        @apply opacity-100;
+    }
+
+    .swap-flip input:checked ~ .swap-on,
+    .swap-active:where(.swap-flip) .swap-on,
+    .swap-flip input:indeterminate ~ .swap-indeterminate {
+        transform: rotateY(0deg);
+    }
+</style>
+
+<script>
+    import { $ } from '~frontend/query';
+
+    const html = document.documentElement;
+    const theme = localStorage.getItem('theme') || 'dark';
+    const checkbox = $<HTMLInputElement>('#theme-toggler-checkbox');
+
+    if (checkbox) {
+        // set initial state
+        checkbox.checked = theme !== 'dark';
+
+        // listen for changes
+        checkbox.addEventListener('change', () => {
+            const theme = checkbox.checked ? 'light' : 'dark';
+            localStorage.setItem('theme', theme);
+            html.classList.remove('dark', 'light');
+            html.classList.add(theme);
+        });
+    }
+</script>

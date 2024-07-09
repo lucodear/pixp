@@ -1,0 +1,111 @@
+---
+// a simple pure-css tooltip component
+
+interface Props {
+    text: string;
+    pos?: 'top' | 'right' | 'bottom' | 'left';
+}
+
+let { text: tooltipText, pos = 'top' }: Props = Astro.props;
+
+tooltipText = tooltipText.replace(/'/g, '"');
+tooltipText = tooltipText.startsWith('"') ? tooltipText : `"${tooltipText}`;
+tooltipText = tooltipText.endsWith('"') ? tooltipText : `${tooltipText}"`;
+---
+
+<span tooltip-component class={`tooltip-pos-${pos} leading-[0]`}>
+    <slot />
+</span>
+
+<style define:vars={{ 'tooltip-text': tooltipText }} lang="css">
+    [tooltip-component] {
+        @apply relative leading-[0];
+
+        &:before,
+        &:after {
+            @apply pointer-events-none invisible absolute z-[1000] opacity-0;
+            @apply transition-all duration-75;
+        }
+
+        &:before {
+            @apply z-[500] rounded-md px-2 py-1 text-center text-sm leading-[1.2];
+            @apply content-[--tooltip-text];
+            @apply theme-colors-invert;
+            @apply w-[max-content] max-w-36;
+        }
+
+        &:after {
+            @apply border-[8px] border-solid border-transparent content-[''];
+            @apply w-0 text-[0] leading-[0];
+        }
+
+        &:hover:before,
+        &:hover:after {
+            @apply visible opacity-100;
+        }
+
+        &.tooltip-pos-top {
+            &:before {
+                @apply bottom-full left-1/2 mb-1 -translate-x-1/2;
+            }
+            &:after {
+                @apply bottom-full left-1/2 -translate-x-1/2;
+                @apply [border-bottom:none] [border-top:8px_solid_];
+                @apply border-t-zinc-950;
+                @apply dark:border-t-zinc-300;
+            }
+            &:hover:before,
+            &:hover:after {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        &.tooltip-pos-right {
+            &:before {
+                @apply left-full top-1/2 ml-1 -translate-y-1/2;
+            }
+            &:after {
+                @apply left-full top-1/2 -translate-y-1/2;
+                @apply [border-left:none] [border-right:8px_solid_];
+                @apply border-r-zinc-950;
+                @apply dark:border-r-zinc-300;
+            }
+            &:hover:before,
+            &:hover:after {
+                @apply -translate-y-1/2 translate-x-1;
+            }
+        }
+
+        &.tooltip-pos-bottom {
+            &:before {
+                @apply left-1/2 top-full mt-1 -translate-x-1/2;
+            }
+            &:after {
+                @apply left-1/2 top-full -translate-x-1/2;
+                @apply [border-bottom:8px_solid_] [border-top:none];
+                @apply border-b-zinc-950;
+                @apply dark:border-b-zinc-300;
+            }
+            &:hover:before,
+            &:hover:after {
+                @apply -translate-x-1/2 translate-y-1;
+            }
+        }
+
+        &.tooltip-pos-left {
+            &:before {
+                @apply right-full top-1/2 mr-1 -translate-y-1/2;
+            }
+            &:after {
+                @apply right-full top-1/2 -translate-y-1/2;
+                @apply [border-left:8px_solid_] [border-right:none];
+                @apply border-l-zinc-950;
+                @apply dark:border-l-zinc-300;
+            }
+            &:hover:before,
+            &:hover:after {
+                @apply -translate-x-1 -translate-y-1/2;
+            }
+        }
+    }
+</style>

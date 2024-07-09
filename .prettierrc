@@ -1,0 +1,18 @@
+{
+    "useTabs": false,
+    "singleQuote": true,
+    "trailingComma": "none",
+    "printWidth": 90,
+    "tabWidth": 4,
+    "endOfLine": "lf",
+    "plugins": ["prettier-plugin-astro", "prettier-plugin-tailwindcss"],
+    "pluginSearchDirs": false,
+    "overrides": [
+        {
+            "files": "*.ts",
+            "options": {
+                "printWidth": 100
+            }
+        }
+    ]
+}

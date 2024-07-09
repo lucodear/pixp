@@ -1,0 +1,64 @@
+---
+import type { GithubFile } from '~typings';
+import Grid from './parts/grid.astro';
+import Summary from './parts/summary.astro';
+
+interface Props {
+    file: GithubFile;
+}
+
+const { file } = Astro.props as Props;
+---
+
+<details
+    open
+    class:list={[
+        'border border-zinc-950/5 dark:border-white/5',
+        'rounded-md',
+        'transition-transform duration-200 ease-in-out',
+        '[&>summary>svg]:transition-transform [&>summary>svg]:duration-75 [&>summary>svg]:open:-rotate-90',
+        'overflow-visible',
+        '[&:not([open])>summary]:border-none'
+    ]}
+>
+    <Summary file={file} />
+
+    <div
+        class:list={[
+            'viewer-content',
+            'flex flex-wrap justify-evenly gap-4 [&>div]:theme-colors [&>div]:bg-opacity-50',
+            'bg-zinc-300/5 dark:bg-zinc-900/20',
+            "bg-[url('/point-bg.svg')] bg-16 dark:bg-[url('/point-bg-dark.svg')]"
+        ]}
+    >
+        <div class="relative border-r border-zinc-950/5 dark:border-white/5">
+            <Grid />
+
+            <img
+                class="z-[-1] min-w-[368px] max-w-[368px] select-none brightness-[100%] grayscale-[00%] filter"
+                src={file.rawUrl}
+                alt={file.path}
+            />
+        </div>
+
+        <div class="relative border-r border-zinc-950/5 dark:border-white/5">
+            <Grid
+                class:list={[
+                    '[--grid-blend-mode:multiply] [--grid-stroke-color:#000]',
+                    'dark:[--grid-blend-mode:screen] dark:[--grid-stroke-color:#71717a]'
+                ]}
+                class="font-mono"
+            />
+
+            <img
+                class:list={[
+                    'z-[-1] min-h-[368px] min-w-[368px] max-w-[368px] select-none grayscale filter',
+                    'opacity-50 brightness-[.6] contrast-[200%]',
+                    'dark:brightness-[1]'
+                ]}
+                src={file.rawUrl}
+                alt={file.path}
+            />
+        </div>
+    </div>
+</details>

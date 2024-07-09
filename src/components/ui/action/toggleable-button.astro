@@ -1,0 +1,60 @@
+---
+// a button that can be toggled on and off
+
+interface Props {
+    active?: boolean;
+    action: string;
+}
+
+const { action, active } = Astro.props as Props;
+
+const pressed = active ? 'true' : 'false';
+---
+
+<button class="toggleable-button" aria-pressed={pressed} data-action={action}>
+    <slot />
+</button>
+
+<style>
+    .toggleable-button {
+        @apply cursor-pointer rounded-sm p-[2px] transition-colors;
+
+        &:hover {
+            @apply bg-base/5 dark:bg-dark-base/10;
+        }
+
+        &[aria-pressed='true'] {
+            @apply bg-base/10 dark:bg-dark-base/20;
+        }
+    }
+</style>
+
+<script>
+    import { $$ } from '~frontend/query';
+
+    const buttons = $$('.toggleable-button');
+
+    buttons.forEach((button) => {
+        const action = button.getAttribute('data-action');
+
+        const initialEvent = new CustomEvent('toggle', {
+            bubbles: false,
+            detail: {
+                active: button.getAttribute('aria-pressed') === 'true',
+                action
+            }
+        });
+        button.dispatchEvent(initialEvent);
+
+        button.addEventListener('click', () => {
+            const wasPressed = button.getAttribute('aria-pressed') === 'true';
+            const toggleEvent = new CustomEvent('toggle', {
+                bubbles: false,
+                detail: { active: !wasPressed, action }
+            });
+
+            button.setAttribute('aria-pressed', wasPressed ? 'false' : 'true');
+            button.dispatchEvent(toggleEvent);
+        });
+    });
+</script>

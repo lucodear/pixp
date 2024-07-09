@@ -1,0 +1,19 @@
+---
+interface Props {
+    code?: string | number;
+    title: string;
+    message: string;
+}
+
+const { code, title, message } = Astro.props as Props;
+---
+
+<section class="flex max-w-lg flex-col items-center justify-center gap-8 text-center">
+    <header>
+        <h1 class="text-3xl opacity-40">{code}</h1>
+        <h2 class="mb-4 text-2xl opacity-70">{title}</h2>
+        <p>{message}</p>
+    </header>
+
+    <slot name="action" />
+</section>

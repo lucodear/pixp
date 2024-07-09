@@ -1,0 +1,14 @@
+---
+import Page from '~components/layouts/page.astro';
+---
+
+<Page>
+    <main class="flex min-h-screen items-center justify-center text-center">
+        Logging in with Github...
+    </main>
+</Page>
+
+<script>
+    const { signIn } = await import('auth-astro/client');
+    signIn('github', { callbackUrl: '/auth/github/callback' });
+</script>

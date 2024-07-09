@@ -1,0 +1,67 @@
+{
+    "files.exclude": {
+        // ... 📙
+        ".github": true,
+        "public": false,
+        "src/env.d.ts": true,
+        "logo.png": true,
+
+        // config ⚙️
+        "*.code-workspace": true,
+        ".vscode": true,
+        "package.json": false,
+        "tailwind.config.*": false,
+        "tsconfig.json": true,
+
+        // linters & styles 🧼
+        "biome.jsonc": false,
+        ".prettierrc": true,
+        ".prettierignore": true,
+
+        // trash 🗑️
+        ".astro": true,
+        ".gitignore": true,
+
+        // docs 📝
+        "README.*": true,
+
+        // output and build artifacts 🏗️
+        "dist": true,
+
+        // package management 🍞
+        "node_modules": true
+    },
+    "explorer.fileNesting.patterns": {
+        "astro.config.mjs": "tailwind.config.ts, auth.config.ts",
+        ".env": ".env.*"
+    },
+    "editor.rulers": [100],
+    "[astro]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "astro-build.astro-vscode",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "always"
+        }
+    },
+    "[typescript]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "always"
+        }
+    },
+    "[javascript]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "always"
+        }
+    },
+    "[typescriptreact]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "always"
+        }
+    },
+}

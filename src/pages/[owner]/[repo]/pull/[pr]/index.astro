@@ -1,0 +1,73 @@
+---
+import { Icon } from 'astro-icon/components';
+import { getSession } from 'auth-astro/server';
+import { GET } from 'src/pages/api/[owner]/[repo]/pull/[pr]';
+import Page from '~components/layouts/page.astro';
+import HeaderNavbar from '~components/ui/navigation/header-navbar.astro';
+import FileViewer from '~components/ui/viewer/file-viewer.astro';
+import NotFound from '~pages/404.astro';
+import type { PullRequestCommit } from '~typings';
+
+const session = await getSession(Astro.request);
+
+const response = await GET(Astro);
+
+const url = new URL(Astro.request.url);
+url; // hacky way to avoid unused variable warning caused by https://github.com/withastro/language-tools/issues/721
+
+let found = response.ok;
+
+if (!response.ok) {
+    if (response.status === 403) {
+        if (session) {
+            return Astro.redirect(`/rate-limit`);
+        }
+        return Astro.redirect(`/unauth-rate-limit?ref=${url.pathname}`);
+    }
+}
+
+const pr: PullRequestCommit = await response.json();
+---
+
+{!found && <NotFound />}
+
+{
+    found && (
+        <Page class={'flex min-h-screen flex-col'}>
+            <main class="flex flex-1 flex-col">
+                <HeaderNavbar title={pr.title} number={pr.number} />
+
+                <section>
+                    <div id="viewers" class="contained flex flex-col gap-6">
+                        {/* if not files */}
+                        {pr.files?.length === 0 && (
+                            <div class="text-subtle text-center">
+                                This pull request doesn't change or add any svg files.
+                            </div>
+                        )}
+
+                        {/* if files */}
+                        {pr.files?.map((file) => (
+                            <FileViewer file={file} />
+                        ))}
+                    </div>
+                </section>
+
+                <footer class="mt-auto flex flex-col items-center pb-8 pt-12">
+                    <nav class={'text-subtle flex items-center gap-3 text-sm'}>
+                        <a
+                            href="https://github.com/lucodear/pixp"
+                            target="_blank"
+                            aria-label="Github repository"
+                            rel="noopener noreferrer"
+                            title="Github repository"
+                            class="hover:text-orchid-600 dark:hover:text-orchid-300/70"
+                        >
+                            <Icon name="github" class="h-6 w-6" />
+                        </a>
+                    </nav>
+                </footer>
+            </main>
+        </Page>
+    )
+}

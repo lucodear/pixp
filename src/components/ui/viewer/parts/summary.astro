@@ -1,0 +1,72 @@
+---
+import { Icon } from 'astro-icon/components';
+import ToggleableButton from '~components/ui/action/toggleable-button.astro';
+import Tooltip from '~components/ui/feedback/tooltip.astro';
+import type { GithubFile } from '~typings';
+
+interface Props {
+    file: GithubFile;
+}
+
+const { file } = Astro.props as Props;
+---
+
+<summary
+    class:list={[
+        'file-viewer-summary',
+        'flex items-center gap-2',
+        'border-b border-zinc-950/5 bg-zinc-500/5 py-2 pl-2 pr-3 dark:border-white/5 dark:bg-zinc-900/50'
+    ]}
+>
+    <Icon name={'chevron-down'} class="w-4 cursor-pointer" />
+
+    <nav class="flex-1">
+        <a
+            href={file.blobUrl}
+            class="text-sm font-semibold transition-colors hover:underline"
+            target="_blank"
+        >
+            {file.path}
+        </a>
+    </nav>
+
+    <menu class="inline-flex leading-[0]">
+        <Tooltip text="Toggle borders" pos="left">
+            <ToggleableButton action="toggle-borders">
+                <Icon name="borders" />
+            </ToggleableButton>
+        </Tooltip>
+    </menu>
+</summary>
+
+<script>
+    import { $$ } from '~frontend/query';
+
+    $$('.file-viewer-summary .toggleable-button').forEach((btn) => {
+        btn.addEventListener('toggle', (event: any) => {
+            //  go up to the parents until we find a <details> element
+            let details: HTMLElement | null = btn;
+
+            while (details && details.tagName !== 'DETAILS') {
+                details = details.parentElement;
+            }
+
+            if (details === btn || !details) {
+                // if we didn't find a <details> element, return
+                console.error('No <details> element found for the toggleable button');
+                return;
+            }
+
+            switch (event.detail?.action) {
+                case 'toggle-borders':
+                    toggleBorders(details, event.detail.active);
+                    break;
+            }
+        });
+    });
+
+    /** Toggle the borders of the grid on/off by changing its opacity */
+    function toggleBorders(details: HTMLElement, active: boolean) {
+        details.style.setProperty('--grid-margin-opacity', active ? '0.3' : '0');
+    }
+</script>

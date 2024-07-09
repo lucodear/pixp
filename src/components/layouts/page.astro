@@ -1,0 +1,33 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Head from './head.astro';
+
+interface Props extends HTMLAttributes<'body'> {
+    title?: string;
+    description?: string;
+}
+
+const {
+    title: sufix = '',
+    description = 'Check pixel-perfectness of icons added by pull-requests at 16px',
+    class: cls,
+    'class:list': classList,
+    ...rest
+} = Astro.props;
+
+const title = sufix ? `pixp » ${sufix}` : 'pixp';
+---
+
+<!doctype html>
+<html lang="en">
+    <Head title={title} description={description} />
+
+    <body class:list={['theme-colors', cls, classList]} {...rest}>
+        <slot />
+        <style is:global>
+            @tailwind base;
+            @tailwind components;
+            @tailwind utilities;
+        </style>
+    </body>
+</html>

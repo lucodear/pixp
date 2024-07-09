@@ -1,0 +1,18 @@
+---
+import Page from '~components/layouts/page.astro';
+import ErrorSection from '~components/sections/error-section.astro';
+---
+
+<Page>
+    <main
+        class:list={['h-screen', 'flex flex-col items-center justify-center text-center']}
+    >
+        <ErrorSection
+            title="Rate Limit Exceeded"
+            message=`
+                Github offers a limited number of requests per hour and it seems you have exceeded 
+                it. Wait for a while and try again.
+            `
+        />
+    </main>
+</Page>

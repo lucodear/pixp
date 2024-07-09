@@ -1,0 +1,82 @@
+---
+import { getSession } from 'auth-astro/server';
+import SigninButton from '../action/signin-button.astro';
+import ThemeToggler from '../action/theme-toggler.astro';
+import Logo from '../graphics/logo.astro';
+import UserMenu from './user-menu.astro';
+
+interface Props {
+    number?: number;
+    title?: string;
+}
+
+const { title, number } = Astro.props as Props;
+const { owner, repo, pr } = Astro.params;
+const Element = owner && repo && pr ? 'a' : 'div';
+const homeLink = owner && repo && pr ? `/${owner}/${repo}/pull/${pr}` : undefined;
+const session = await getSession(Astro.request);
+---
+
+<nav
+    class:list={[
+        'theme-colors-blurry z-[10]',
+        'sticky top-0 mb-6 pb-5 pt-5',
+        'ring-1 ring-zinc-950/5 dark:ring-white/5'
+    ]}
+>
+    <header class="contained z-[2] flex items-center justify-between">
+        <div class="z-[3] flex items-center gap-4 sm:gap-6">
+            <Element href={homeLink}>
+                <Logo class:list={['h-6']} />
+            </Element>
+
+            <div class="flex flex-col text-sm leading-none">
+                {
+                    owner && repo && (
+                        <div>
+                            <a
+                                class="hidden transition-colors hover:text-orchid-600 sm:inline hover:dark:text-orchid-400"
+                                href={`https://github.com/${owner}`}
+                                target="_blank"
+                            >
+                                {owner}
+                            </a>
+                            <span class="hidden opacity-50 sm:inline">/</span>
+                            <a
+                                class="font-semibold transition-colors hover:text-orchid-600 sm:inline hover:dark:text-orchid-400"
+                                href={`https://github.com/${owner}/${repo}`}
+                                target="_blank"
+                            >
+                                {repo}
+                            </a>
+                        </div>
+                    )
+                }
+
+                {
+                    title && number && (
+                        <span class="pt-[6px]">
+                            <span class="hidden sm:inline">{title}</span>
+                            <span class="inline text-xs leading-none sm:hidden">
+                                Pull Request
+                            </span>
+
+                            <a
+                                class="opacity-50 transition-[opacity,color] hover:text-orchid-600 hover:opacity-100 hover:dark:text-orchid-400"
+                                href={`https://github.com/${owner}/${repo}/pull/${pr}`}
+                                target="_blank"
+                            >
+                                #{number}
+                            </a>
+                        </span>
+                    )
+                }
+            </div>
+        </div>
+        <div class="z-[3] flex items-center gap-4 sm:gap-6">
+            <ThemeToggler />
+
+            {session ? <UserMenu /> : <SigninButton />}
+        </div>
+    </header>
+</nav>

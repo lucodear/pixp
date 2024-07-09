@@ -1,0 +1,57 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'svg'> {
+    maxWidth?: number;
+    strokeWidth?: number;
+}
+
+const { maxWidth = 368, strokeWidth = 1, class: cls, ...rest }: Props = Astro.props;
+
+const defaultStyles = [
+    '[mix-blend-mode:--grid-blend-mode]',
+    '[&>g>line]:stroke-[--grid-stroke-color]',
+    '[&>path]:fill-[--grid-margin-color]',
+    '[&>path]:opacity-[--grid-margin-opacity]',
+    '[&>path]:transition-opacity'
+];
+
+const offset = strokeWidth / 2;
+const lines = Array.from({ length: 15 }, (_, i) => (i + 1) * 23 + offset);
+---
+
+<svg
+    viewBox="0 0 368 368"
+    class:list={[
+        `absolute max-w-[${maxWidth}px] min-w-[${maxWidth}px]`,
+        'bottom-0 top-0 z-[1]',
+        defaultStyles,
+        cls
+    ]}
+    {...rest}
+>
+    <path d="M0,0V368H368V0ZM345,345H24V24H345Z"></path>
+
+    <g class="horizontal">
+        {lines.map((y) => <line x1="0" x2={maxWidth} y1={y} y2={y} />)}
+    </g>
+    <g class="vertical">
+        {lines.map((x) => <line x1={x} x2={x} y1="0" y2={maxWidth} />)}
+    </g>
+</svg>
+
+<style is:global>
+    :root {
+        --grid-stroke-color: #a1a1aa;
+        --grid-blend-mode: multiply;
+        --grid-margin-color: #f43f5e;
+        --grid-margin-opacity: 0;
+    }
+
+    html.dark {
+        --grid-stroke-color: #71717a;
+        --grid-blend-mode: screen;
+        --grid-margin-color: #f43f5e;
+        --grid-margin-opacity: 0;
+    }
+</style>
