@@ -20,7 +20,7 @@ const { file } = Astro.props as Props;
 >
     <Icon name={'chevron-down'} class="w-4 cursor-pointer" />
 
-    <nav class="flex-1">
+    <nav class="flex-1 leading-none">
         <a
             href={file.blobUrl}
             class="text-sm font-semibold transition-colors hover:underline"
